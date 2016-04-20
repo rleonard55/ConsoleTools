@@ -10,7 +10,11 @@ Another thing I am not “in love with” is right now Command Parser is subscri
 #CommandParser (Better Name Someday)
 
 Allows string[] args to be passed to the parser with a flexible and generally overridable behaviors. 
-The most simple implementation looks like this, **var a = args.ParseOnly();** where the args are parsed into a list of “CmdGroup” objects that join switch identifiers, switch text and any arguments provided. 
+The most simple implementation looks like this, 
+```
+var a = args.ParseOnly();
+```
+where the args are parsed into a list of “CmdGroup” objects that join switch identifiers, switch text and any arguments provided. 
 
 **Note: Arguments are not bound to a space barrier** 
 IE      '-file c: \program files  = -file “c:\Program files”'
@@ -42,7 +46,6 @@ Various collection conversions are provided as well by allowing a comma to be us
 - BindingList
 - Array
  
-
 * In the case of SecureString the default setting is to force “secure mode” IE ignoring passed parameters for that type and instead prompting the user for that data so it can be read char by char into a SecureString element. This also is overridable via the settings class, should you want a small village to burst into flames… :(
 
 * The system can be setup via the **CommandParser.Settings.PromptForMissingRequired** property to prompt the end user at runtime for any forgotten required parameters with an optional timeout of 30 secs. 
@@ -53,22 +56,18 @@ Various collection conversions are provided as well by allowing a comma to be us
 
 There are multiple events subscriptions available to effect control on what happens in cases like parseException, HelpRequested, IgnoredParameter as well as a good degree of control via the Setting class (and nested classes)
 
-Types can be used to model the parsing against and then a different type can have those parameters loaded into it. 
-
+### Types can be used to model the parsing against and then a different type can have those parameters loaded into it. 
+```
 var Reg = new RegClass();
-
 args.ParseAs(typeof (IInterface)).LoadInto(Reg);
-
-A dynamic “cast” is available 
-
-'var d = args.ParseAs(typeof(AbstractClass));
-
+```
+### A dynamic “cast” is available 
+```
+var d = args.ParseAs(typeof(AbstractClass));
 var dynObj = d.ToDynamic();
-
 // The line below will throw and Exception if MyInt was not passed in via command line
-
-var myInt = dynObj.MyInt;'
-
+var myInt = dynObj.MyInt;
+```
 
 #ConsoleHelper
 
