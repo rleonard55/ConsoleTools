@@ -685,7 +685,7 @@ namespace ConsoleTools
         #endregion
 
         #region Nested type: MultipleSwitchUseException
-
+        [Serializable]
         private class MultipleSwitchUseException : Exception
         {
             #region Constructors
@@ -2347,7 +2347,7 @@ namespace ConsoleTools
 
         #region Nested type: ConsoleResponse
 
-        public class ConsoleResponse
+        public class ConsoleResponse:IDisposable
         {
             #region Constructors
 
@@ -2427,13 +2427,13 @@ namespace ConsoleTools
 
                     foreach (var item in AutoCompleteList)
                     {
-                        var used = false;
+                     //   var used = false;
                         for (int i = 0; i < item.Length; i++)
                         {
                             var c = char.ToLower(item[i]);
                             if (returnDict.ContainsKey(c)) continue;
                             returnDict.Add(c, item);
-                            used = true;
+                    //        used = true;
                             break;
                         }
                         //Todo Should note/throw here really
@@ -2607,7 +2607,6 @@ namespace ConsoleTools
                     _timeOutTimer.Enabled = false;
                     _timeOutExpired = true;
                     _timeOutTimer.Elapsed -= handler;
-                    _timeOutTimer.Dispose();
                     ResponseType = ConsoleResponseType.TimedOut;
                 };
 
@@ -2640,6 +2639,12 @@ namespace ConsoleTools
                 => "abcdefghijklmnopqrstuvwxyz";
 
             #endregion
+
+            /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+            public void Dispose()
+            {
+               _timeOutTimer.Dispose();
+            }
         }
 
         #endregion

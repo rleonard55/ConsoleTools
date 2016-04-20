@@ -4,7 +4,7 @@ using ConsoleTools;
 
 namespace Console_Tools
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -25,7 +25,7 @@ namespace Console_Tools
         }
 
 
-        public struct MyStruct : IInterface
+        private struct MyStruct : IInterface
         {
             public string String { get; set; }
             public int Int { get; set; }
