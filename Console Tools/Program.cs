@@ -15,6 +15,9 @@ namespace Console_Tools
 
             var a = args.ParseOnly();
             var b = args.ParseAs(typeof(IInterface));
+            
+                
+
             var c = args.ParseAs(typeof(MyStruct));
             var d = args.ParseAs(typeof(AbstractClass));
 
@@ -48,7 +51,7 @@ namespace Console_Tools
             [CommandParser.CmdProperty(Required = true)]
             public ConsoleColor NotProvided { get; set; }
 
-            [CommandParser.CmdProperty]
+            [CommandParser.CmdProperty(Description = "asdfasdf")]
             public SecureString Password { get; set; }
 
             public string String { get; set; }

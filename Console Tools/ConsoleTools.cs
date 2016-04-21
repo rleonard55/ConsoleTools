@@ -56,6 +56,10 @@ namespace ConsoleTools
 
         #region Properties & Indexers
 
+        /// <summary>
+        /// Gets any errors the Parser encountered. 
+        /// </summary>
+        /// <value>The errors.</value>
         public static IEnumerable<Exception> Errors => ErrorsList?.Distinct().ToList();
 
         /// <summary>
