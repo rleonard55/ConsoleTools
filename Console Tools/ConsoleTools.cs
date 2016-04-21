@@ -33,6 +33,9 @@ using Timer = System.Timers.Timer;
 
 namespace ConsoleTools
 {
+    /// <summary>
+    /// Class CommandParser used to parse command line parameters to a application.
+    /// </summary>
     internal static class CommandParser
     {
         #region Constructors
