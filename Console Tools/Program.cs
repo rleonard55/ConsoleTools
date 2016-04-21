@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Security;
 using ConsoleTools;
 
@@ -12,21 +13,19 @@ namespace Console_Tools
             CommandParser.Settings.PromptForMissingRequired = true;
             CommandParser.Settings.PromptForMissingTimeoutEnabled = false;
             CommandParser.Settings.ThrowOnMultipleSwitchUse = true;
-
-            var a = args.ParseOnly();
-            var b = args.ParseAs(typeof(IInterface));
+            CommandParser.Settings.ForceSecure = false;
+            //var a = args.ParseOnly();
+            //var b = args.ParseAs(typeof(IInterface));
             
                 
 
-            var c = args.ParseAs(typeof(MyStruct));
-            var d = args.ParseAs(typeof(AbstractClass));
+            //var c = args.ParseAs(typeof(MyStruct));
+            //var d = args.ParseAs(typeof(AbstractClass));
 
             var e = args.Parse(new RegClass());
-
             //var dynObj = d.ToDynamic();
             //var myInt = dynObj.Int;
         }
-
 
         private struct MyStruct : IInterface
         {

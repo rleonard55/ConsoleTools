@@ -157,7 +157,7 @@ namespace ConsoleTools
         /// <param name="args">The arguments.</param>
         /// <param name="type">The type.</param>
         /// <returns>Dictionary&lt;System.String, dynamic&gt;.</returns>
-        [DebuggerStepThrough]
+       // [DebuggerStepThrough]
         public static Dictionary<string, dynamic> ParseAs(this string[] args, Type type)
         {
             Setup();
@@ -181,25 +181,31 @@ namespace ConsoleTools
 
                 if (cmdGroup == null)
                 {
-                    if (propertyInfo.PropertyType == typeof(SecureString) && !HelpWasRequested)
-                    {
-                        returnDict.Add(name, GetSecureStringFromConsole(propertyInfo));
-                    }
-                    else if (att?.Required == true)
+                    if (att?.Required == true)
                     {
                         if (Settings.PromptForMissingRequired)
                         {
-                            var success = false;
-                            while (!success)
+                            if (propertyInfo.PropertyType == typeof (SecureString) && !HelpWasRequested)
                             {
-                                try
+                                returnDict.Add(name,
+                                    Settings.ForceSecure
+                                        ? GetSecureStringFromConsole(propertyInfo)
+                                        : GetStringFromConsole(propertyInfo));
+                            }
+                            else
+                            {
+                                var success = false;
+                                while (!success && HelpWasRequested==false)
                                 {
-                                    returnDict.Add(name, GetStringFromConsole(propertyInfo));
-                                    success = true;
-                                }
-                                catch (Exception e)
-                                {
-                                    WriteLine(ConsoleColor.Red, e.Message);
+                                    try
+                                    {
+                                        returnDict.Add(name, GetStringFromConsole(propertyInfo));
+                                        success = true;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        WriteLine(ConsoleColor.Red, e.Message);
+                                    }
                                 }
                             }
                         }
@@ -228,13 +234,13 @@ namespace ConsoleTools
                     {
                         dynamic value = null;
 
-                        if (propertyInfo.PropertyType == typeof(SecureString) && Settings.ForceSecure)
-                            value = GetSecureStringFromConsole(propertyInfo);
-                        else
-                            value = Get(cmdGroup.Argument, propertyInfo.PropertyType);
-
-                        if (value == null)
-                            continue;
+                        while (value == null)
+                        {
+                            if (propertyInfo.PropertyType == typeof (SecureString) && Settings.ForceSecure)
+                                value = GetSecureStringFromConsole(propertyInfo);
+                            else
+                                value = Get(cmdGroup.Argument, propertyInfo.PropertyType);
+                        }
 
                         returnDict.Add(name, value);
                         usedGroups.Add(cmdGroup);
@@ -445,17 +451,17 @@ namespace ConsoleTools
         {
             if (value == null) throw new ArgumentNullException("value");
 
-            using (var secured = new SecureString())
-            {
-                var charArray = value.ToArray();
-                foreach (var t in charArray)
-                {
-                    secured.AppendChar(t);
-                }
+            var secured = new SecureString();
 
-                secured.MakeReadOnly();
-                return secured;
+            var charArray = value.ToArray();
+            foreach (var t in charArray)
+            {
+                secured.AppendChar(t);
             }
+
+            secured.MakeReadOnly();
+            return secured;
+
         }
 
         private static string ToSpaced(this IEnumerable<char> chars)
@@ -1285,7 +1291,7 @@ namespace ConsoleTools
             foreach (var prop in passedType.GetProperties().Where(p => p.CanRead && p.CanWrite))
             {
                 var att = prop.GetPropertyAttribute();
-                if (prop.PropertyType == typeof(SecureString)) continue;
+                if (prop.PropertyType == typeof(SecureString) && Settings.ForceSecure) continue;
                 if (!Settings.AllowAllProperties && att == null) continue;
                 if (!Settings.HelpSettings.ShowAllProperties && att == null) continue;
 
