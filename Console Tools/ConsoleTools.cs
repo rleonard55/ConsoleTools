@@ -157,7 +157,7 @@ namespace ConsoleTools
         /// <param name="args">The arguments.</param>
         /// <param name="type">The type.</param>
         /// <returns>Dictionary&lt;System.String, dynamic&gt;.</returns>
-       // [DebuggerStepThrough]
+        [DebuggerStepThrough]
         public static Dictionary<string, dynamic> ParseAs(this string[] args, Type type)
         {
             Setup();
@@ -977,6 +977,7 @@ namespace ConsoleTools
                 /// <value>The show help on errors.</value>
                 public static bool ShowHelpOnErrors { get; set; } = true;
 
+                public static bool PageStopInHelp { get; set; } = true;
                 internal static IEnumerable<string> HelpRequestString
                 {
                     get
@@ -1272,6 +1273,9 @@ namespace ConsoleTools
 
         private static void PrintHelp(Type passedType)
         {
+            if (Settings.HelpSettings.PageStopInHelp)
+                EnablePaging = true;
+
             var entryAssembly = Assembly.GetEntryAssembly();
 
             var descriptionAttribute = entryAssembly
@@ -1342,6 +1346,8 @@ namespace ConsoleTools
                 WriteLine(ConsoleColor.Cyan, classAtt.HelpText);
                 Indent = 0;
             }
+
+            EnablePaging = false;
         }
 
         private static void ReleaseConsole()
@@ -1597,7 +1603,7 @@ namespace ConsoleTools
             if (result.All(r => r.All(char.IsDigit)) == false || result.Length > 2)
                 ExitWithException(new ArgumentException($"Connot convert {input} to IEnumerable<int>"));
 
-            var intResult = result.Select(r => Int32.Parse(r)).ToArray();
+            var intResult = result.Select(r => int.Parse(r)).ToArray();
             return Enumerable.Range(intResult[0], (intResult[1] - intResult[0]) + 1).Select(s => s.ToString()).ToArray();
         }
 
@@ -2168,7 +2174,7 @@ namespace ConsoleTools
         public static void Spinner(ConsoleText prompt, IList<ConsoleText> slides, ConsoleText completionText,
             Action workerAction)
         {
-            if (!String.IsNullOrEmpty(prompt.Text))
+            if (!string.IsNullOrEmpty(prompt.Text))
                 Write(prompt);
 
             var task = Task.Factory.StartNew(workerAction);
@@ -2181,7 +2187,7 @@ namespace ConsoleTools
                 {
                     slide.Text = slide.Text.PadRight(maxSlideLength);
 
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     Write(slide);
                     Console.SetCursorPosition(Console.CursorLeft - slide.Text.Length, Console.CursorTop);
                     if (task.IsCompleted) break;
@@ -2190,7 +2196,7 @@ namespace ConsoleTools
 
             Console.CursorVisible = true;
             Write(completionText);
-            Console.SetCursorPosition(Indent, Console.CursorTop + 1);
+           // Console.SetCursorPosition(Indent, Console.CursorTop + 1);
             task.GetAwaiter().GetResult();
         }
 
@@ -2202,7 +2208,7 @@ namespace ConsoleTools
         public static void SpinnerDashes(string prompt, Action workerAction)
         {
             Spinner(new ConsoleText(prompt), new List<ConsoleText> { "-", "\\", "|", "/" },
-                new ConsoleText("=> Complete") { ForegroundColor = ConsoleColor.Yellow }, workerAction);
+                new ConsoleText("=> Complete\n") { ForegroundColor = ConsoleColor.Yellow }, workerAction);
         }
 
         /// <summary>
@@ -2249,7 +2255,7 @@ namespace ConsoleTools
             var i = vertical;
             var y = horizontal;
 
-            text = String.Format(text, args);
+            text = string.Format(text, args);
             text = text.Replace("\t", "    ");
             var lines = text.Split('\n', '\r');
 
@@ -2266,17 +2272,6 @@ namespace ConsoleTools
                 i = vertical;
                 y = y + 1;
             }
-        }
-
-        /// <summary>
-        ///     Writes the input as a vertical line.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        public static void WriteVerticalLine(string text)
-        {
-            var vertical = Console.CursorTop;
-            WriteVertical(text);
-            Console.SetCursorPosition(Console.CursorLeft + 1, vertical);
         }
 
         /// <summary>
@@ -3057,7 +3052,7 @@ namespace ConsoleTools
         {
             try
             {
-                if (!String.IsNullOrEmpty(prompt))
+                if (!string.IsNullOrEmpty(prompt))
                     Write(consoleColor, prompt, args);
 
 
@@ -3087,7 +3082,7 @@ namespace ConsoleTools
         {
             try
             {
-                if (!String.IsNullOrEmpty(prompt))
+                if (!string.IsNullOrEmpty(prompt))
                     Write(consoleColor, prompt, args);
 
                 Console.CursorVisible = false;
@@ -3136,7 +3131,7 @@ namespace ConsoleTools
             {
                 Console.CursorVisible = false;
 
-                if (!String.IsNullOrEmpty(prompt))
+                if (!string.IsNullOrEmpty(prompt))
                     Write(consoleColor, prompt, args);
 
                 while (consoleKeys.Any(key => Console.ReadKey(true).Key != key)) { }
@@ -3206,7 +3201,7 @@ namespace ConsoleTools
 
         public static void WriteLineCentered(string message, params object[] args)
         {
-            Console.SetCursorPosition(GetCenteredTextStartingPoint(String.Format(message, args)), Console.CursorTop);
+            Console.SetCursorPosition(GetCenteredTextStartingPoint(string.Format(message, args)), Console.CursorTop);
             WriteLine(message);
         }
 
