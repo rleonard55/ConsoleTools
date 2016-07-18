@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security;
+using System.Security.Policy;
 using System.Threading;
 using ConsoleTools;
 using static ConsoleTools.ConsoleHelper;
@@ -29,6 +30,7 @@ namespace Console_Tools
                 args.ParseStatic(typeof(StaticClass));
             });
 
+            var asdf = StaticClass.myUrl;
             WriteLine(ConsoleColor.Green, $"Thanks! {StaticClass.String}");
 
             //var dynObj = d.ToDynamic();
@@ -117,6 +119,7 @@ namespace Console_Tools
             public static string String { get; set; }
             public static int Int { get; set; }
             public static bool Bool { get; set; }
+            public static Url myUrl { get; set; }
         }
     }
 }

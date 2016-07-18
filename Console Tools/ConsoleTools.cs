@@ -164,6 +164,7 @@ namespace ConsoleTools
 
             var returnDict = new Dictionary<string, dynamic>();
             var cmdGroups = args.ParseOnly();
+
             CheckForHelpRequest(cmdGroups);
 
             var properties = type.GetProperties();
@@ -449,7 +450,7 @@ namespace ConsoleTools
 
         private static SecureString ToSecureString(this IEnumerable<char> value)
         {
-            if (value == null) throw new ArgumentNullException("value");
+            if (value == null) throw new ArgumentNullException(nameof(value));
 
             var secured = new SecureString();
 
@@ -1154,7 +1155,7 @@ namespace ConsoleTools
         }
 
 
-        [DebuggerStepThrough]
+        //[DebuggerStepThrough]
         private static dynamic Get(string input, Type type)
         {
             LoadTypeConverters();
@@ -1178,8 +1179,30 @@ namespace ConsoleTools
                     return myConverter.ConvertTo(null, CultureInfo.CurrentCulture, input, type);
             }
 
+            var ctorsTypes = type.CtorsWithSingleParam().ToList();
+            if (ctorsTypes.Contains(typeof (string)))
+                return Activator.CreateInstance(type, input);
+
             return Convert.ChangeType(input, type);
         }
+
+        public static IEnumerable<Type> CtorsWithSingleParam(this Type type)
+        {
+            return type?.GetConstructors()
+                .Where(c => c.GetParameters().Length == 1)
+                .Select(c => c.GetParameters()[0].ParameterType);
+        }
+
+        private static bool HasStringCtor(this Type type)
+        {
+            return type?.GetConstructor(new[] { typeof(string) }) != null;
+        }
+
+        private static object CreateWithStringCtor(this Type type, string input)
+        {
+            return Activator.CreateInstance(type, input);
+        }
+
 
         private static IEnumerable<dynamic> GetChildrenOf(Type type)
         {
