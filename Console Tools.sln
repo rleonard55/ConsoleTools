@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console Tools", "Console Tools\Console Tools.csproj", "{ABE7B399-2956-4FDA-9341-F3AD5490D5D7}"
+EndProject
+Project("{E09DD79A-4488-4AB9-8D3F-A7EEE78BF432}") = "ConsoleTools.Nuget", "ConsoleTools.Nuget\ConsoleTools.Nuget.nuproj", "{67A7DEF8-5A28-4645-A6BC-510AC8724473}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{ABE7B399-2956-4FDA-9341-F3AD5490D5D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE7B399-2956-4FDA-9341-F3AD5490D5D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE7B399-2956-4FDA-9341-F3AD5490D5D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67A7DEF8-5A28-4645-A6BC-510AC8724473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67A7DEF8-5A28-4645-A6BC-510AC8724473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67A7DEF8-5A28-4645-A6BC-510AC8724473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67A7DEF8-5A28-4645-A6BC-510AC8724473}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
