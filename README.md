@@ -1,5 +1,7 @@
 # ConsoleTools
 
+Git on NuGet https://www.nuget.org/packages/ConsoleTools.Nuget 
+
 I wanted to create a “single” class that could be added to a WinForm or Console application to allow for a rich user interaction typical with other command line tools. I wanted it to be as simple as “Copy Paste” to add this functionality to an existing project with little to no impact on the business classes within the code base. 
 
 First, this been screaming to be exploded into a multiple independent classes for some time and already has begun to feel a bit ‘unwieldy’ at times but, I have been creating multiple single executable utilities lately that I just couldn’t bear to have additional external dependences on… so it remains and has been useful so far but should still be considered ‘Alpha’ software for the time being.
